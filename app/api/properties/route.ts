@@ -277,9 +277,19 @@ export async function POST(request: Request) {
       );
     }
 
-    if (propertyData.area <= 0) {
+    // NOVA LÓGICA DE VALIDAÇÃO PARA ÁREAS DE TERRENO
+    const isLand = propertyData.tipo.includes("Terreno");
+
+    if (!isLand && propertyData.area <= 0) {
       return NextResponse.json(
-        { error: "Área deve ser maior que zero" },
+        { error: "Área útil deve ser maior que zero" },
+        { status: 400 },
+      );
+    }
+
+    if (isLand && propertyData.areaTerreno <= 0) {
+      return NextResponse.json(
+        { error: "A área do terreno deve ser maior que zero" },
         { status: 400 },
       );
     }
