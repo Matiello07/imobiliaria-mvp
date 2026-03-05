@@ -59,8 +59,6 @@ const parseCurrency = (value: string | number): number => {
 // --- TYPES ---
 
 interface PropertyFormProps {
-    // We use 'any' here because initialData might come from a DB (with numbers)
-    // while PropertyFormData requires strings for controlled inputs.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialData?: any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -244,7 +242,6 @@ export function PropertyForm({
         return true;
     };
 
-
     const handleSubmitInternal = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -261,7 +258,6 @@ export function PropertyForm({
             }
         }
 
-
         const vagasCalc = (Number(formData.vagasCobertas) || 0) + (Number(formData.vagasDescobertas) || 0);
         const finalGaragem = isLand
             ? "0"
@@ -269,7 +265,7 @@ export function PropertyForm({
                 ? formData.garagem
                 : vagasCalc.toString();
 
-        // Prepare payload safely converting strings back to numbers
+        // Prepare payload safely converting strings back to numbers and handling missing terrain fields
         const payload = {
             ...formData,
             preco: parseCurrency(formData.preco),
@@ -277,12 +273,17 @@ export function PropertyForm({
             valorCondominio: parseCurrency(formData.valorCondominio),
             depositoSeguranca: parseCurrency(formData.depositoSeguranca),
             garagem: finalGaragem,
-            // Clear invalid fields for land
-            area: isLand ? "0" : formData.area,
-            quarto: isLand ? "0" : formData.quarto || "0",
-            banheiro: isLand ? "0" : formData.banheiro || "0",
-            suites: isLand ? "0" : formData.suites || "0",
-            anoConstrucao: isLand ? "" : formData.anoConstrucao,
+            
+            // Clear invalid fields for land explicitly to avoid 400 Bad Request
+            area: isLand ? "0" : (formData.area || "0"),
+            quarto: isLand ? "0" : (formData.quarto || "0"),
+            banheiro: isLand ? "0" : (formData.banheiro || "0"),
+            suites: isLand ? "0" : (formData.suites || "0"),
+            vagasCobertas: isLand ? "0" : (formData.vagasCobertas || "0"),
+            vagasDescobertas: isLand ? "0" : (formData.vagasDescobertas || "0"),
+            anoConstrucao: isLand ? "0" : (formData.anoConstrucao || "0"),
+            condicaoImovel: isLand ? "" : (formData.condicaoImovel || ""),
+            
             latitude: formData.locationMode === "none" ? null : formData.latitude,
             longitude: formData.locationMode === "none" ? null : formData.longitude,
         };
@@ -603,7 +604,7 @@ export function PropertyForm({
                                         Modo Terreno
                                     </h3>
                                     <p className="text-yellow-700 dark:text-yellow-400 text-xs mt-1">
-                                        Campos de construção ocultados para este tipo de imóvel.
+                                        Campos de construção ocultados para este tipo de imóvel. O sistema os enviará como zero automaticamente.
                                     </p>
                                 </div>
                             </div>
