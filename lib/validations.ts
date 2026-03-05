@@ -59,3 +59,56 @@ export const changePasswordSchema = z
     message: "A nova senha não pode ser igual à atual",
     path: ["newPassword"],
   });
+
+// =========================================
+// SCHEMA PARA IMÓVEIS (Tratamento para Terrenos)
+// =========================================
+
+export const propertySchema = z.object({
+  titulo: z.string().min(1, "O título é obrigatório"),
+  sobreTitulo: z.string().optional(),
+  descricao: z.string().min(1, "A descrição é obrigatória"),
+  tipo: z.string().min(1, "O tipo do imóvel é obrigatório"),
+  finalidade: z.string().optional().default("Venda"),
+
+  // Valores - aceita tanto string (se vier direto do FormData) quanto number
+  preco: z.union([z.string(), z.number()]),
+  precoLocacao: z.union([z.string(), z.number()]).optional(),
+  tipoValor: z.string().optional(),
+  periodoPagamento: z.string().optional(),
+  depositoSeguranca: z.union([z.string(), z.number()]).optional(),
+  valorCondominio: z.union([z.string(), z.number()]).optional(),
+  periodicidadeCondominio: z.string().optional(),
+
+  // Endereço
+  cidade: z.string().min(1, "A cidade é obrigatória"),
+  bairro: z.string().min(1, "O bairro é obrigatório"),
+  endereco: z.string().optional(),
+  latitude: z.union([z.string(), z.number()]).nullable().optional(),
+  longitude: z.union([z.string(), z.number()]).nullable().optional(),
+
+  // Áreas e Cômodos (Com coerção para número e padrão 0 para Terrenos)
+  quarto: z.coerce.number().optional().default(0),
+  suites: z.coerce.number().optional().default(0),
+  banheiro: z.coerce.number().optional().default(0),
+  garagem: z.coerce.number().optional().default(0),
+  vagasCobertas: z.coerce.number().optional().default(0),
+  vagasDescobertas: z.coerce.number().optional().default(0),
+  vagasSubsolo: z.boolean().optional().default(false),
+  area: z.coerce.number().optional().default(0),
+  areaTerreno: z.coerce.number().optional().default(0),
+
+  // Detalhes extras
+  statusMercado: z.string().optional(),
+  condicaoImovel: z.string().optional(),
+  anoConstrucao: z.coerce.number().optional().nullable().catch(null),
+  tipoContrato: z.string().optional(),
+
+  // Mídias e Configurações de exibição
+  fotos: z.array(z.string()).optional(),
+  features: z.array(z.string()).optional(),
+  displayAddress: z.boolean().optional().default(true),
+  displayDetails: z.boolean().optional().default(true),
+  status: z.string().optional(),
+  destaque: z.boolean().optional().default(false),
+});
