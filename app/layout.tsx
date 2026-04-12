@@ -99,6 +99,23 @@ export default function RootLayout({
   });
 `}
 </Script>
+
+      <Script id="form-conversion" strategy="afterInteractive">
+{`
+  document.addEventListener('click', function(e) {
+    const target = e.target.closest('button');
+    if (!target) return;
+
+    const text = target.innerText.toLowerCase();
+
+    if (text.includes('Enviar Mensagem ')) {
+      gtag('event', 'conversion', {
+        'send_to': 'AW-18079208549/hrTuCKu7ypocEOWo66xD'
+      });
+    }
+  });
+`}
+</Script>
       
       <body className={inter.className}>
         <Providers>
