@@ -82,6 +82,23 @@ export default function RootLayout({
       });
     `}
   </Script>
+
+      <Script id="form-conversion" strategy="afterInteractive">
+{`
+  document.addEventListener('click', function(e) {
+    const target = e.target.closest('button');
+    if (!target) return;
+
+    const text = target.innerText.toLowerCase();
+
+    if (text.includes('solicitar agendamento')) {
+      gtag('event', 'conversion', {
+        'send_to': 'AW-18079208549/2_oHCN2QypocEOWo66xD'
+      });
+    }
+  });
+`}
+</Script>
       
       <body className={inter.className}>
         <Providers>
