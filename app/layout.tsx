@@ -100,7 +100,7 @@ export default function RootLayout({
 `}
 </Script>
 
-      <Script id="form-conversion" strategy="afterInteractive">
+        <Script id="form-conversion" strategy="afterInteractive">
 {`
   document.addEventListener('click', function(e) {
     const target = e.target.closest('button');
