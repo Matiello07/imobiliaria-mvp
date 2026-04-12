@@ -108,7 +108,7 @@ export default function RootLayout({
 
     const text = target.innerText.toLowerCase();
 
-    if (text.includes('Enviar Mensagem ')) {
+    if (text.includes('enviar mensagem')) {
       gtag('event', 'conversion', {
         'send_to': 'AW-18079208549/hrTuCKu7ypocEOWo66xD'
       });
