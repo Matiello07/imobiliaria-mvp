@@ -65,6 +65,23 @@ export default function RootLayout({
     gtag('config', 'AW-18079208549');
   `}
 </Script>
+
+      <Script id="whatsapp-conversion" strategy="afterInteractive">
+    {`
+      document.addEventListener('click', function(e) {
+        const target = e.target.closest('a');
+        if (!target) return;
+
+        const url = target.href;
+
+        if (url.includes('wa.me') || url.includes('api.whatsapp.com')) {
+          gtag('event', 'conversion', {
+            'send_to': 'AW-18079208549/wkL5CNn6sJocEOWo66xD'
+          });
+        }
+      });
+    `}
+  </Script>
       
       <body className={inter.className}>
         <Providers>
